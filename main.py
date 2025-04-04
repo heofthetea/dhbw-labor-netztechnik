@@ -1,6 +1,4 @@
 import time
-from models.bpdu import BPDU
-from models.switch import Switch
 from config import load_yaml, init_switches
 
 
@@ -16,5 +14,4 @@ def main():
 
 
 if __name__ == "__main__":
-
     main()

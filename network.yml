@@ -42,7 +42,6 @@ switches:
 
 edges:
   a:
-    b: 10
     c: 20
   b:
     c: 5
