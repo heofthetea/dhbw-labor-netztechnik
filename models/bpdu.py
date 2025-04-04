@@ -1,8 +1,5 @@
-from models.switch import Switch
-
-
-class Bpdu:
-    def __init__(self, switch: Switch, root_switch: Switch, root_path_cost: int):
-        self.switch = switch
+class BPDU:
+    def __init__(self, sender, root_switch, root_costs: int):
+        self.sender = sender
         self.root_switch = root_switch
-        self.root_path_cost = root_path_cost
+        self.root_costs = root_costs
