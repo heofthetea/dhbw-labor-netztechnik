@@ -1,5 +1,5 @@
-import time
 from config import load_yaml, init_switches
+from models.switch import Switch
 
 
 def main():
@@ -10,6 +10,22 @@ def main():
     for switch in switches.values():
         switch.thread.join()  # Wait for all threads to finish
     print("All switches have finished.")
+    output(switches.values())
+
+
+def output(switches: list[Switch]):
+    """
+    Print a representation of the spanning tree.
+    """
+    print("\n\nSpanning Tree:")
+    for switch in switches:
+        print(f"{switch.given_id}:")
+        if switch.root_switch == switch:
+            print("  Root: self")
+            continue
+        print(
+            f"  Root: {switch.root_switch.given_id} via {switch.root_port.given_id} (cost: {switch.root_costs})"
+        )
 
 
 if __name__ == "__main__":
