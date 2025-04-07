@@ -1,0 +1,11 @@
+services:
+  spanning_tree:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    environment:
+      - SPANNING_TREE_ITERATIONS=10
+      - SPANNING_TREE_TIMEOUT=1
+    volumes:
+      - ./network.yml:/spanning-tree/network.yml
