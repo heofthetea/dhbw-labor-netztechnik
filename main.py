@@ -7,10 +7,9 @@ def main():
     for switch in switches.values():
         switch.start()
 
-    time.sleep(5)  # Let the switches run for a while
     for switch in switches.values():
-        switch.stop()
-    print("All switches stopped.")
+        switch.thread.join()  # Wait for all threads to finish
+    print("All switches have finished.")
 
 
 if __name__ == "__main__":

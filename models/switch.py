@@ -1,3 +1,4 @@
+from os import getenv
 import time
 import threading
 import queue
@@ -17,10 +18,12 @@ class Switch:
         root_costs (int): The cost to reach the root switch.
         root_port (Switch): The "port" (represented as a neighbour) to the root switch.
         queue (queue.Queue): Thread-safe Queue for processing received BPDUs.
+        running (bool): Flag indicating whether the switch is running.
 
     """
 
-    TIMEOUT = 1  # timeout waited between bpdus, in seconds
+    TIMEOUT = int(getenv("SPANNING_TREE_TIMEOUT", 1))
+    ITERATIONS = int(getenv("SPANNING_TREE_ITERATIONS", 10))
 
     def __init__(self, given_id: str, mac_address: str, *, priority: int = 32768):
         self.given_id = given_id
@@ -46,10 +49,12 @@ class Switch:
     def start(self):
         self.running = True
         self.thread.start()
+        self.log("Started")
 
     def stop(self):
         self.running = False
         self.thread.join()
+        self.log("Stopped")
 
     def send_bpdu(self):
         """
@@ -62,6 +67,7 @@ class Switch:
     def process_bpdu(self, bpdu: BPDU):
         """
         Process a BPDU received from a neighbour.
+        Decides whether to accept the bpdu and update root switch or root path accordingly.
         """
         if bpdu.root_switch > self.root_switch:
             return
@@ -80,7 +86,13 @@ class Switch:
         self.log(f"new root costs: {self.root_costs} via {self.root_port.given_id}")
 
     def run(self):
-        while self.running:
+        """
+        Main loop of the switch.
+        Sends BPDUs and processes the BPDU queue.
+        """
+        for _ in range(Switch.ITERATIONS):
+            if not self.running:
+                break
             self.send_bpdu()
 
             while not self.queue.empty():
@@ -91,6 +103,8 @@ class Switch:
                 except queue.Empty:
                     pass
             time.sleep(Switch.TIMEOUT)
+        self.log("done")
+        self.running = False
 
     # ------------------------------------------------------
     ## helper methods
