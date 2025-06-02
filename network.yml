@@ -29,20 +29,3 @@ edges:
     e: 90
   d:
     e: 100
-# env:
-#   iterations: 10
-#   timeout: 1
-# switches:
-#   a:
-#     mac: "11:11:11:11:11:11"
-#     priority: 1000
-#   b:
-#     mac: "22:22:22:22:22:22"
-#   c:
-#     mac: "00:00:00:00:00:09"
-
-# edges:
-#   a:
-#     c: 20
-#   b:
-#     c: 5
