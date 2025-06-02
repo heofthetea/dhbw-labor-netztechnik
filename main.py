@@ -21,10 +21,10 @@ def output(switches: list[Switch]):
     for switch in switches:
         print(f"{switch.given_id}:")
         if switch.root_switch == switch:
-            print("  Root: self")
+            print(f"  root: {switch.given_id}")
             continue
         print(
-            f"  Root: {switch.root_switch.given_id} via {switch.root_port.given_id} (cost: {switch.root_costs})"
+            f"  root: {switch.root_switch.given_id} via {switch.root_port.given_id} (total cost: {switch.root_costs})"
         )
 
 

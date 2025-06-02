@@ -1,4 +1,3 @@
-from os import getenv
 import time
 import threading
 import queue
@@ -22,12 +21,9 @@ class Switch:
 
     """
 
-    TIMEOUT = int(getenv("SPANNING_TREE_TIMEOUT", 1))
-    ITERATIONS = int(getenv("SPANNING_TREE_ITERATIONS", 10))
-
     def __init__(self, given_id: str, mac_address: str, *, priority: int = 32768):
         self.given_id = given_id
-        self.mac_address = Switch.mac_to_int(mac_address)
+        self.mac_address = mac_address
         self.priority = priority
         self.neighbours: dict[Switch, int] = {}
 
@@ -44,7 +40,10 @@ class Switch:
         return f"Switch(given_id={self.given_id}, mac_address={self.mac_address}, priority={self.priority})"
 
     def __lt__(self, other):
-        return (self.priority, self.mac_address) < (other.priority, other.mac_address)
+        return (self.priority, Switch.mac_to_int(self.mac_address)) < (
+            other.priority,
+            Switch.mac_to_int(other.mac_address),
+        )
 
     def start(self):
         self.running = True
